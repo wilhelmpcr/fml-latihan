@@ -1,0 +1,46 @@
+/* Sidebar Styling */
+aside {
+  width: 260px;
+  background: white;
+  height: 100vh;
+  position: fixed;
+  border-right: 1px solid #f1e4d3;
+  padding: 2rem;
+}
+
+/* Main Content Area */
+main, .content-area {
+  margin-left: 260px; /* Memberi ruang agar tidak tertutup sidebar */
+  padding: 2rem;
+  width: calc(100% - 260px);
+}
+
+/* Statistik Grid (4 kotak di atas) */
+/* Ini akan memaksa kotak-kotak kamu berjejer ke samping */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.stat-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 1px solid #f1e4d3;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.stat-card h3 {
+  font-size: 0.9rem;
+  color: #888;
+  margin: 0;
+}
+
+.stat-card p {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+  color: #2c3e50;
+}

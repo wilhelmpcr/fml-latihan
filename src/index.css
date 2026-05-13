@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+@theme {
+  --color-hijau: #10B981;
+  --color-teks-samping: #6B7280;
+  --color-garis: #E5E7EB;
+  --font-poppins: "Poppins", sans-serif;
+}
+
+:root {
+  /* Font clean untuk dashboard profesional */
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1.5;
+  color: #2d3436; 
+  background-color: #f4f7f6; /* Warna abu-abu sangat muda untuk background */
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  /* PERBAIKAN: Hapus display flex & place-items agar layout melebar normal */
+}
+
+/* Memastikan MainLayout terbagi menjadi Sidebar (kiri) dan Konten (kanan) */
+/* Di MainLayout.jsx, pembungkus utamanya harus memiliki class "flex" */
+.flex {
+  display: flex;
+}
+
+/* Mengatur Link agar tidak ada garis bawah */
+a {
+  text-decoration: none;
+  color: inherit;
+}

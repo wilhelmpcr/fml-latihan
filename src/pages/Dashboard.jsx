@@ -8,40 +8,32 @@ const statCards = [
     iconBg: "bg-oranye",
     label: "Total Pesanan",
     value: "75",
-    growth: "+12%",
-    growthColor: "text-green-400 bg-green-400/10",
-    bar: "bg-oranye",
-    barWidth: "w-1/3",
+    growth: "+23%",
+    color: "#FF5C00",
   },
   {
     icon: FaTruck,
     iconBg: "bg-blue-500",
     label: "Total Terkirim",
     value: "175",
-    growth: "+23%",
-    growthColor: "text-green-400 bg-green-400/10",
-    bar: "bg-blue-500",
-    barWidth: "w-2/3",
+    growth: "+8%",
+    color: "#3B82F6",
   },
   {
     icon: FaUtensils,
     iconBg: "bg-amber-500",
     label: "Paket Catering",
     value: "24",
-    growth: "+8%",
-    growthColor: "text-green-400 bg-green-400/10",
-    bar: "bg-amber-500",
-    barWidth: "w-1/4",
+    growth: "+18%",
+    color: "#F59E0B",
   },
   {
     icon: FaUsers,
     iconBg: "bg-purple-500",
     label: "Total Pelanggan",
-    value: "320",
-    growth: "+18%",
-    growthColor: "text-green-400 bg-green-400/10",
-    bar: "bg-purple-500",
-    barWidth: "w-1/2",
+    value: "1,240",
+    growth: "+12%",
+    color: "#A855F7",
   },
 ];
 
@@ -117,23 +109,51 @@ export default function Dashboard() {
         {statCards.map((card, i) => {
           const Icon = card.icon;
           return (
-            // Gunakan bg-[#1A1A1A] agar kartu terlihat kontras di background hitam
             <div
               key={i}
-              className="bg-[#1A1A1A] p-6 rounded-[28px] border border-white/5 shadow-xl"
+              className="bg-dark-card p-6 rounded-[32px] border border-garis hover:border-white/20 transition-all group overflow-hidden relative"
             >
-              <div className="flex justify-between items-start mb-6">
-                <div className={`${card.iconBg} p-3.5 rounded-2xl`}>
+              <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-white/5 rounded-full blur-2xl group-hover:bg-white/10 transition-colors"></div>
+              
+              <div className="flex justify-between items-start mb-4 relative z-10">
+                <div className={`${card.iconBg} p-3 rounded-2xl shadow-lg`}>
                   <Icon className="text-white text-xl" />
                 </div>
-                <span className="text-[10px] font-black px-2.5 py-1 rounded-lg bg-green-500/10 text-green-500">
-                  {card.growth}
-                </span>
+                <div className="flex flex-col items-end">
+                  <span className="text-[10px] font-black px-2 py-1 rounded-lg bg-green-500/10 text-green-500 mb-2">
+                    {card.growth}
+                  </span>
+                  {/* Mini Sparkline SVG with Glow */}
+                  <svg className="w-16 h-8 overflow-visible" viewBox="0 0 100 40">
+                    {/* Shadow Glow */}
+                    <path
+                      d="M0 35 Q 10 35, 20 25 T 40 28 T 60 15 T 80 20 T 100 5"
+                      fill="none"
+                      stroke={card.color}
+                      strokeWidth="6"
+                      strokeLinecap="round"
+                      className="opacity-20 blur-[2px]"
+                    />
+                    {/* Main Path */}
+                    <path
+                      d="M0 35 Q 10 35, 20 25 T 40 28 T 60 15 T 80 20 T 100 5"
+                      fill="none"
+                      stroke={card.color}
+                      strokeWidth="4"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </div>
               </div>
-              <p className="text-gray-400 text-xs font-semibold uppercase">
-                {card.label}
-              </p>
-              <p className="text-4xl font-bold text-white mt-2">{card.value}</p>
+              
+              <div className="relative z-10">
+                <p className="text-teks-samping text-xs font-semibold uppercase tracking-wider">
+                  {card.label}
+                </p>
+                <h3 className="text-4xl font-bold text-white mt-1 group-hover:scale-105 transition-transform origin-left">
+                  {card.value}
+                </h3>
+              </div>
             </div>
           );
         })}

@@ -76,6 +76,11 @@ const recentOrders = [
 ];
 
 export default function Dashboard() {
+  const currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
+  const displayName = currentUser
+    ? currentUser.name || `${currentUser.firstName || ""} ${currentUser.lastName || ""}`.trim()
+    : "Wilhelm";
+
   return (
     <div>
       <div className="flex items-center justify-between mb-2">
@@ -91,7 +96,7 @@ export default function Dashboard() {
         <div className="flex items-center justify-between relative z-10">
           <div>
             <h1 className="text-3xl font-bold text-white">
-              Selamat Datang, Wilhelm 👨‍🍳
+              Selamat Datang, {displayName} 👨‍🍳
             </h1>
             <p className="text-teks-samping mt-2">
               Kelola pesanan catering Anda hari ini dengan efisien.

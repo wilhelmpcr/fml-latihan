@@ -8,7 +8,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [dataForm, setDataForm] = useState({ email: "", password: "" });
+  const [dataForm, setDataForm] = useState({ username: "", password: "" });
 
   const handleChange = (evt) => {
     const { name, value } = evt.target;
@@ -18,11 +18,27 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(false);
+    setError("");
 
+    // 1. Cek kecocokan di localStorage (User yang mendaftar secara lokal)
+    const localUsers = JSON.parse(localStorage.getItem("users") || "[]");
+    const matchingUser = localUsers.find(
+      (u) =>
+        (u.email === dataForm.username || u.username === dataForm.username) &&
+        u.password === dataForm.password
+    );
+
+    if (matchingUser) {
+      setLoading(false);
+      localStorage.setItem("currentUser", JSON.stringify(matchingUser));
+      navigate("/");
+      return;
+    }
+
+    // 2. Jika tidak ada di lokal, coba API DummyJSON (untuk akun demo emilys)
     axios
       .post("https://dummyjson.com/user/login", {
-        username: dataForm.email,
+        username: dataForm.username,
         password: dataForm.password,
       })
       .then((response) => {
@@ -30,6 +46,7 @@ export default function Login() {
           setError(response.data.message);
           return;
         }
+        localStorage.setItem("currentUser", JSON.stringify(response.data));
         navigate("/");
       })
       .catch((err) => {
@@ -72,7 +89,8 @@ export default function Login() {
           </label>
           <input
             type="text"
-            name="email"
+            name="username"
+            value={dataForm.username}
             onChange={handleChange}
             placeholder="Admin1_resto"
             className="w-full px-5 py-4 bg-transparent border border-white/20 rounded-2xl text-white placeholder-white/20 outline-none focus:border-[#FF5C00] transition-all"
@@ -87,6 +105,7 @@ export default function Login() {
           <input
             type="password"
             name="password"
+            value={dataForm.password}
             onChange={handleChange}
             placeholder="••••••••"
             className="w-full px-5 py-4 bg-transparent border border-white/20 rounded-2xl text-white placeholder-white/20 outline-none focus:border-[#FF5C00] transition-all"

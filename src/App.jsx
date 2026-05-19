@@ -14,6 +14,7 @@ const AuthLayout  = React.lazy(() => import("./layouts/AuthLayout"));
 const Login       = React.lazy(() => import("./pages/auth/Login"));
 const Register    = React.lazy(() => import("./pages/auth/Register"));
 const Forgot      = React.lazy(() => import("./pages/auth/Forgot"));
+const Components  = React.lazy(() => import("./pages/Components"));
 
 function App() {
   const errorImg = "/img/error.png";
@@ -30,6 +31,7 @@ function App() {
           <Route path="/customers" element={<Customers />} />
           <Route path="/products"  element={<Products />} />
           <Route path="/products/:id" element={<ProductDetail />} />
+          <Route path="/components" element={<Components />} />
 
           {/* Error Pages */}
           <Route path="/error-400" element={

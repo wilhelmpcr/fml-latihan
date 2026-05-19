@@ -5,6 +5,7 @@ import {
   MdRestaurantMenu,
   MdLogout,
   MdStorefront,
+  MdExtension,
 } from "react-icons/md";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { HiOutlineUserGroup } from "react-icons/hi";
@@ -34,6 +35,12 @@ export default function Sidebar() {
       name: "Products",
       icon: MdStorefront,
       path: "/products",
+    },
+    {
+      id: "menu-components",
+      name: "Components",
+      icon: MdExtension,
+      path: "/components",
     },
     {
       id: "menu-5",
@@ -131,7 +138,10 @@ export default function Sidebar() {
         </div>
 
         <button
-          onClick={() => navigate("/login")}
+          onClick={() => {
+            localStorage.removeItem("currentUser");
+            navigate("/login");
+          }}
           className="mt-4 w-full flex items-center justify-center gap-2 p-3 text-red-400 hover:bg-red-400/10 rounded-xl transition-all font-semibold"
         >
           <MdLogout className="text-xl" />

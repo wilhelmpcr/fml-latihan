@@ -3,6 +3,12 @@ import { FcAreaChart } from "react-icons/fc";
 import { SlSettings } from "react-icons/sl";
 
 export default function Header() {
+  const currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
+  const displayName = currentUser
+    ? currentUser.name || `${currentUser.firstName || ""} ${currentUser.lastName || ""}`.trim()
+    : "Wilhelm S. Tamba";
+  const avatarUrl = currentUser?.image || "/img/profile.jpg";
+
   return (
     <div className="flex justify-between items-center p-6 bg-dark-bg/50 backdrop-blur-md border-b border-garis sticky top-0 z-50">
       {/* Search Bar */}
@@ -29,10 +35,10 @@ export default function Header() {
         <div className="flex items-center space-x-3 border-l pl-6 border-garis">
           <div className="text-right">
             <p className="text-xs text-teks-samping">Welcome back,</p>
-            <p className="text-sm font-bold text-white">Wilhelm S. Tamba</p>
+            <p className="text-sm font-bold text-white">{displayName}</p>
           </div>
           <img
-            src="/img/profile.jpg"
+            src={avatarUrl}
             className="w-11 h-11 rounded-full ring-2 ring-oranye/20 object-cover"
             alt="avatar"
           />

@@ -12,7 +12,17 @@ export default function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simulasi register -> redirect ke login
+    if (!dataForm.email || !dataForm.password) {
+      alert("Email dan password wajib diisi!");
+      return;
+    }
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    if (users.some((u) => u.email === dataForm.email)) {
+      alert("Email sudah terdaftar!");
+      return;
+    }
+    users.push(dataForm);
+    localStorage.setItem("users", JSON.stringify(users));
     navigate("/login");
   };
 

@@ -6,6 +6,7 @@ import {
   MdLogout,
   MdStorefront,
   MdExtension,
+  MdFlashOn,
 } from "react-icons/md";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { HiOutlineUserGroup } from "react-icons/hi";
@@ -41,6 +42,12 @@ export default function Sidebar() {
       name: "Components",
       icon: MdExtension,
       path: "/components",
+    },
+    {
+      id: "menu-gacor",
+      name: "Fitur Gacor",
+      icon: MdFlashOn,
+      path: "/fitur-gacor",
     },
     {
       id: "menu-5",

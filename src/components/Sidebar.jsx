@@ -104,6 +104,7 @@ export default function Sidebar() {
               <li key={menu.id}>
                 <NavLink
                   to={menu.path}
+                  end
                   className={({ isActive }) =>
                     `flex items-center rounded-xl p-4 font-medium transition-all duration-200
                     ${

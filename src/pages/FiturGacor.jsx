@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PageHeader from "../components/PagesHeader";
 import { 
   Card, 
@@ -140,14 +140,73 @@ const categoryChartConfig = {
 export default function FiturGacor() {
   const [timeframe, setTimeframe] = useState("monthly");
   const [isRefreshing, setIsRefreshing] = useState(false);
+  
+  // useState: state untuk list catatan performa dan input baru
+  const [notes, setNotes] = useState(() => {
+    const saved = localStorage.getItem("gacor_notes");
+    return saved ? JSON.parse(saved) : [
+      { id: 1, text: "Omset mingguan naik signifikan berkat pesanan Tumpeng Hias Nusantara.", timestamp: "02/06/2026 14:30" },
+      { id: 2, text: "Snack Box Syukuran perlu promo agar mencapai target bulanan.", timestamp: "02/06/2026 16:15" }
+    ];
+  });
+  const [newNote, setNewNote] = useState("");
+
+  // useRef: references untuk DOM manipulation & timer safety
+  const noteInputRef = useRef(null);
+  const notesEndRef = useRef(null);
+  const refreshTimerRef = useRef(null);
 
   const activeData = datasets[timeframe];
 
+  // useEffect: sinkronisasi Title Document setiap timeframe berubah
+  useEffect(() => {
+    document.title = `Fitur Gacor (${timeframe.toUpperCase()}) - Catering CRM`;
+  }, [timeframe]);
+
+  // useEffect: menyimpan catatan ke localStorage setiap kali notes berubah
+  useEffect(() => {
+    localStorage.setItem("gacor_notes", JSON.stringify(notes));
+  }, [notes]);
+
+  // useEffect: auto scroll ke catatan terbawah setiap kali ada catatan baru
+  useEffect(() => {
+    notesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [notes]);
+
+  // useRef + useEffect: handle refresh secara aman dari memory leak
   const handleRefresh = () => {
     setIsRefreshing(true);
-    setTimeout(() => {
+    if (refreshTimerRef.current) {
+      clearTimeout(refreshTimerRef.current);
+    }
+    refreshTimerRef.current = setTimeout(() => {
       setIsRefreshing(false);
     }, 800);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (refreshTimerRef.current) {
+        clearTimeout(refreshTimerRef.current);
+      }
+    };
+  }, []);
+
+  const handleAddNote = () => {
+    if (!newNote.trim()) return;
+    const now = new Date();
+    const formattedDate = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    
+    setNotes([...notes, {
+      id: Date.now(),
+      text: newNote,
+      timestamp: formattedDate
+    }]);
+    setNewNote("");
+  };
+
+  const handleDeleteNote = (id) => {
+    setNotes(notes.filter(note => note.id !== id));
   };
 
   // Helper to format currency labels (e.g. 50.000.000 -> 50jt)
@@ -425,6 +484,63 @@ export default function FiturGacor() {
               <span className="text-emerald-500">+4% Hari ini</span>
             </div>
           </div>
+        </div>
+      </Card>
+
+      {/* Card: Catatan & Aktivitas Gacor (Implementasi useState, useEffect, useRef) */}
+      <Card className="p-6">
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h4 className="text-lg font-bold text-white">Log Aktivitas & Catatan Insight Gacor</h4>
+            <p className="text-xs text-gray-400 mt-1">Mencatat insight performa catering menggunakan kombinasi useState, useEffect, dan useRef</p>
+          </div>
+          <button
+            onClick={() => noteInputRef.current?.focus()}
+            className="text-xs font-semibold text-[#FF5C00] hover:underline bg-[#FF5C00]/10 px-3 py-1.5 rounded-lg border border-[#FF5C00]/20 cursor-pointer"
+          >
+            Fokus ke Input Catatan
+          </button>
+        </div>
+
+        {/* List of Notes */}
+        <div className="max-h-48 overflow-y-auto space-y-3 mb-4 pr-2 custom-scrollbar">
+          {notes.map((note) => (
+            <div key={note.id} className="bg-white/[0.02] border border-white/5 rounded-xl p-3 flex justify-between items-start gap-4">
+              <div>
+                <p className="text-sm text-gray-200">{note.text}</p>
+                <span className="text-[10px] text-gray-500 mt-1 block">{note.timestamp}</span>
+              </div>
+              <button 
+                onClick={() => handleDeleteNote(note.id)}
+                className="text-xs text-red-500 hover:text-red-400 transition cursor-pointer"
+              >
+                Hapus
+              </button>
+            </div>
+          ))}
+          {notes.length === 0 && (
+            <p className="text-sm text-gray-500 text-center py-4">Belum ada catatan performa. Tulis catatan pertama Anda di bawah!</p>
+          )}
+          <div ref={notesEndRef} />
+        </div>
+
+        {/* Add Note Form */}
+        <div className="flex gap-2">
+          <input
+            ref={noteInputRef}
+            type="text"
+            value={newNote}
+            onChange={(e) => setNewNote(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleAddNote()}
+            placeholder="Tulis insight performa di sini..."
+            className="flex-1 bg-white/[0.02] border border-white/10 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-[#FF5C00] transition"
+          />
+          <button
+            onClick={handleAddNote}
+            className="bg-[#FF5C00] hover:bg-[#ff7a30] text-white text-sm font-semibold px-4 py-2 rounded-xl transition cursor-pointer"
+          >
+            Tambah Catatan
+          </button>
         </div>
       </Card>
     </div>

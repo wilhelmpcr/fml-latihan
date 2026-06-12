@@ -75,6 +75,7 @@ a {
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
+
   --radius-xl: calc(var(--radius) * 1.4);
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
@@ -125,4 +126,148 @@ a {
   html {
     @apply font-sans;
   }
+}
+
+/* ===== DARK MODE (default) ===== */
+.dark-mode {
+  --bg-main: #0F0F0F;
+  --bg-card: #1A1A1A;
+  --bg-card-hover: rgba(255,255,255,0.05);
+  --border-color: rgba(255,255,255,0.05);
+  --text-primary: #FFFFFF;
+  --text-secondary: #9CA3AF;
+  --input-bg: #1A1A1A;
+  --header-bg: rgba(15,15,15,0.5);
+  --scrollbar-thumb: rgba(255,255,255,0.1);
+}
+
+/* ===== LIGHT MODE ===== */
+.light-mode {
+  --bg-main: #F0F2F5;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: rgba(0,0,0,0.03);
+  --border-color: rgba(0,0,0,0.08);
+  --text-primary: #111827;
+  --text-secondary: #6B7280;
+  --input-bg: #F9FAFB;
+  --header-bg: rgba(240,242,245,0.8);
+  --scrollbar-thumb: rgba(0,0,0,0.15);
+}
+
+.light-mode {
+  /* Overrides for hardcoded page colors in light mode */
+  .bg-\[\#1A1A1A\],
+  .bg-dark-card {
+    background-color: #FFFFFF !important;
+  }
+  
+  .bg-\[\#0F0F0F\],
+  .bg-dark-main {
+    background-color: #F0F2F5 !important;
+  }
+
+  .border-white\/5,
+  .border-white\/10,
+  .border-garis {
+    border-color: rgba(0, 0, 0, 0.08) !important;
+  }
+
+  /* Text color overrides */
+  .text-gray-200 {
+    color: #1F2937 !important;
+  }
+  .text-gray-300 {
+    color: #374151 !important;
+  }
+  .text-gray-400 {
+    color: #4B5563 !important;
+  }
+  .text-gray-500 {
+    color: #6B7280 !important;
+  }
+  .text-teks-samping {
+    color: #6B7280 !important;
+  }
+  .text-white\/80 {
+    color: rgba(0, 0, 0, 0.7) !important;
+  }
+  .text-gray-400\/70 {
+    color: rgba(107, 114, 128, 0.7) !important;
+  }
+
+  /* Specific text-white overrides in page headers/containers */
+  .bg-\[\#1A1A1A\] .text-white,
+  .bg-dark-card .text-white,
+  h1.text-white,
+  h2.text-white,
+  h3.text-white,
+  h4.text-white,
+  .text-3xl.text-white,
+  .text-2xl.text-white {
+    color: #111827 !important;
+  }
+  
+  /* Tables specific row hover/bg overrides */
+  .bg-white\/\[0\.02\] {
+    background-color: rgba(0, 0, 0, 0.02) !important;
+  }
+  .bg-white\/\[0\.01\] {
+    background-color: rgba(0, 0, 0, 0.01) !important;
+  }
+  .bg-white\/5 {
+    background-color: rgba(0, 0, 0, 0.04) !important;
+  }
+  .hover\:bg-white\/5:hover {
+    background-color: rgba(0, 0, 0, 0.04) !important;
+  }
+  .hover\:bg-white\/\[0\.05\]:hover {
+    background-color: rgba(0, 0, 0, 0.04) !important;
+  }
+  .group:hover .group-hover\:bg-white\/10 {
+    background-color: rgba(0, 0, 0, 0.06) !important;
+  }
+  .group:hover .group-hover\:text-white {
+    color: #111827 !important;
+  }
+}
+
+/* Apply CSS variables ke elemen utama */
+.dark-mode body,
+.light-mode body {
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Tema layout utama */
+[data-theme-layout] {
+  background-color: var(--bg-main) !important;
+  color: var(--text-primary) !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+[data-theme-card] {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+[data-theme-header] {
+  background-color: var(--header-bg) !important;
+  border-color: var(--border-color) !important;
+  transition: background-color 0.3s ease;
+}
+[data-theme-text-secondary] {
+  color: var(--text-secondary) !important;
+}
+[data-theme-input] {
+  background-color: var(--input-bg) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Dark mode filter for embedded maps */
+.dark iframe {
+  filter: grayscale(1) invert(0.9) hue-rotate(180deg);
+  opacity: 0.85;
+  transition: filter 0.3s ease, opacity 0.3s ease;
 }

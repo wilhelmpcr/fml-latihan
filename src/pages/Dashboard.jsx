@@ -164,62 +164,93 @@ export default function Dashboard() {
         })}
       </div>
 
-      {/* Recent Orders Table */}
-      <div className="bg-dark-card rounded-[32px] border border-garis overflow-hidden">
-        <div className="p-7 border-b border-garis flex items-center justify-between">
-          <div>
-            <h2 className="font-bold text-xl text-white">Pesanan Terbaru</h2>
-            <p className="text-xs text-teks-samping mt-1">
-              Pantau arus pesanan catering yang masuk
-            </p>
+      {/* Grid: Pesanan Terbaru & Google Maps */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Recent Orders Table */}
+        <div className="lg:col-span-2 bg-dark-card rounded-[32px] border border-garis overflow-hidden">
+          <div className="p-7 border-b border-garis flex items-center justify-between">
+            <div>
+              <h2 className="font-bold text-xl text-white">Pesanan Terbaru</h2>
+              <p className="text-xs text-teks-samping mt-1">
+                Pantau arus pesanan catering yang masuk
+              </p>
+            </div>
+          </div>
+          <div className="overflow-x-auto px-4 pb-4">
+            <table className="w-full text-left border-separate border-spacing-y-2">
+              <thead>
+                <tr className="text-[10px] text-teks-samping/50 uppercase tracking-[0.2em]">
+                  <th className="p-4 font-bold">ID Pesanan</th>
+                  <th className="p-4 font-bold">Pelanggan</th>
+                  <th className="p-4 font-bold">Paket</th>
+                  <th className="p-4 font-bold">Status</th>
+                  <th className="p-4 font-bold text-right">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentOrders.map((order) => (
+                  <tr
+                    key={order.id}
+                    className="bg-white/[0.02] hover:bg-white/[0.05] transition-all rounded-2xl group"
+                  >
+                    <td className="p-4 text-sm font-bold text-oranye first:rounded-l-2xl">
+                      {order.id}
+                    </td>
+                    <td className="p-4 text-sm font-semibold text-gray-200">
+                      {order.customer}
+                    </td>
+                    <td className="p-4 text-sm text-teks-samping">
+                      {order.menu}
+                    </td>
+                    <td className="p-4 text-sm">
+                      <span
+                        className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-tighter ${
+                          order.status === "Completed"
+                            ? "bg-green-500/10 text-green-500"
+                            : order.status === "Pending"
+                              ? "bg-amber-500/10 text-amber-500"
+                              : "bg-red-500/10 text-red-500"
+                        }`}
+                      >
+                        {order.status}
+                      </span>
+                    </td>
+                    <td className="p-4 text-sm font-bold text-white text-right last:rounded-r-2xl">
+                      {order.total}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
-        <div className="overflow-x-auto px-4 pb-4">
-          <table className="w-full text-left border-separate border-spacing-y-2">
-            <thead>
-              <tr className="text-[10px] text-teks-samping/50 uppercase tracking-[0.2em]">
-                <th className="p-4 font-bold">ID Pesanan</th>
-                <th className="p-4 font-bold">Pelanggan</th>
-                <th className="p-4 font-bold">Paket</th>
-                <th className="p-4 font-bold">Status</th>
-                <th className="p-4 font-bold text-right">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recentOrders.map((order) => (
-                <tr
-                  key={order.id}
-                  className="bg-white/[0.02] hover:bg-white/[0.05] transition-all rounded-2xl group"
-                >
-                  <td className="p-4 text-sm font-bold text-oranye first:rounded-l-2xl">
-                    {order.id}
-                  </td>
-                  <td className="p-4 text-sm font-semibold text-gray-200">
-                    {order.customer}
-                  </td>
-                  <td className="p-4 text-sm text-teks-samping">
-                    {order.menu}
-                  </td>
-                  <td className="p-4 text-sm">
-                    <span
-                      className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-tighter ${
-                        order.status === "Completed"
-                          ? "bg-green-500/10 text-green-500"
-                          : order.status === "Pending"
-                            ? "bg-amber-500/10 text-amber-500"
-                            : "bg-red-500/10 text-red-500"
-                      }`}
-                    >
-                      {order.status}
-                    </span>
-                  </td>
-                  <td className="p-4 text-sm font-bold text-white text-right last:rounded-r-2xl">
-                    {order.total}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+
+        {/* Google Maps Card */}
+        <div className="bg-dark-card rounded-[32px] border border-garis p-7 flex flex-col justify-between overflow-hidden relative">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-oranye/5 rounded-full blur-2xl"></div>
+          <div className="relative z-10 mb-4">
+            <h2 className="font-bold text-xl text-white">Area Layanan Utama</h2>
+            <p className="text-xs text-teks-samping mt-1">
+              Jangkauan pengiriman & lokasi dapur pusat
+            </p>
+          </div>
+          <div className="flex-1 min-h-[260px] relative rounded-2xl overflow-hidden border border-garis/50 shadow-inner z-10">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126748.24355523825!2d107.57311654124316!3d-6.903444342261899!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e6398252477f%3A0x146a1f9a0f47e33e!2sBandung%2C%20Bandung%20City%2C%20West%20Java!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="rounded-2xl"
+              title="Google Maps NusaCater"
+            ></iframe>
+          </div>
+          <div className="mt-4 relative z-10 flex items-center justify-between text-[11px] text-teks-samping">
+            <span>Dapur Utama: Kota Bandung</span>
+            <span className="text-[#FF5C00] font-bold">Jangkauan 25km</span>
+          </div>
         </div>
       </div>
     </div>

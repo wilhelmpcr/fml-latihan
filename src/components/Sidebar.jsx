@@ -12,9 +12,26 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { NavLink, useNavigate } from "react-router-dom";
 import { GiChefToque } from "react-icons/gi";
+import { FiUsers } from "react-icons/fi";
+import { useTheme } from "../context/ThemeContext";
 
 export default function Sidebar() {
   const navigate = useNavigate();
+  const { theme } = useTheme();
+  const isLight = theme === "light";
+
+  const sidebarBg = isLight ? "bg-white border-black/[0.06]" : "bg-[#1A1A1A] border-white/[0.05]";
+  const logoText = isLight ? "text-gray-900" : "text-white";
+  const subText = isLight ? "text-gray-400" : "text-gray-500";
+  const menuLabel = isLight ? "text-gray-400/70" : "text-gray-500/50";
+  const inactiveLink = isLight
+    ? "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+    : "text-gray-400 hover:bg-white/5 hover:text-white";
+  const activeLink = "bg-[#FF5C00]/10 text-[#FF5C00] shadow-[inset_4px_0_0_0_#FF5C00]";
+  const footerBorder = isLight ? "border-black/[0.06]" : "border-white/[0.05]";
+  const logoutBtn = isLight
+    ? "text-red-400 hover:bg-red-50"
+    : "text-red-400 hover:bg-red-400/10";
 
   // Variabel menus harus didefinisikan di dalam fungsi Sidebar
   const menus = [
@@ -30,6 +47,12 @@ export default function Sidebar() {
       name: "Customers",
       icon: HiOutlineUserGroup,
       path: "/customers",
+    },
+    {
+      id: "menu-users",
+      name: "Users",
+      icon: FiUsers,
+      path: "/users",
     },
     {
       id: "menu-4",
@@ -70,21 +93,21 @@ export default function Sidebar() {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen w-72 bg-dark-card border-r border-garis sticky top-0">
+    <div className={`flex flex-col min-h-screen w-72 border-r sticky top-0 transition-colors duration-300 ${sidebarBg}`}>
       {/* Logo */}
-      <div className="p-8 border-b border-garis">
+      <div className={`p-8 border-b transition-colors duration-300 ${footerBorder}`}>
         <div className="flex items-center gap-3">
-          <div className="bg-oranye p-2 rounded-xl shadow-[0_0_15px_rgba(255,92,0,0.3)]">
+          <div className="bg-[#FF5C00] p-2 rounded-xl shadow-[0_0_15px_rgba(255,92,0,0.3)]">
             <MdRestaurantMenu className="text-white text-2xl" />
           </div>
           <div>
             <div className="flex items-baseline">
-              <span className="font-poppins text-2xl font-bold text-white">
+              <span className={`font-poppins text-2xl font-bold ${logoText}`}>
                 NusaCater
               </span>
-              <span className="text-oranye text-2xl font-bold">.</span>
+              <span className="text-[#FF5C00] text-2xl font-bold">.</span>
             </div>
-            <span className="text-[10px] text-teks-samping font-semibold tracking-[0.2em]">
+            <span className={`text-[10px] font-semibold tracking-[0.2em] ${subText}`}>
               CATERING DASHBOARD
             </span>
           </div>
@@ -93,7 +116,7 @@ export default function Sidebar() {
 
       {/* Menu */}
       <div className="flex-1 px-4 py-8 overflow-y-auto">
-        <p className="text-[10px] font-bold text-teks-samping/50 px-4 mb-6 tracking-[0.2em]">
+        <p className={`text-[10px] font-bold px-4 mb-6 tracking-[0.2em] ${menuLabel}`}>
           MAIN MENU
         </p>
 
@@ -108,9 +131,7 @@ export default function Sidebar() {
                   className={({ isActive }) =>
                     `flex items-center rounded-xl p-4 font-medium transition-all duration-200
                     ${
-                      isActive
-                        ? "bg-oranye/10 text-oranye shadow-[inset_4px_0_0_0_#FF5C00]"
-                        : "text-teks-samping hover:bg-white/5 hover:text-white"
+                      isActive ? activeLink : inactiveLink
                     }`
                   }
                 >
@@ -124,8 +145,8 @@ export default function Sidebar() {
       </div>
 
       {/* Footer */}
-      <div className="p-4 border-t border-garis">
-        <div className="bg-gradient-to-br from-oranye to-[#ff8c00] rounded-3xl p-5 shadow-lg relative overflow-hidden">
+      <div className={`p-4 border-t transition-colors duration-300 ${footerBorder}`}>
+        <div className="bg-gradient-to-br from-[#FF5C00] to-[#ff8c00] rounded-3xl p-5 shadow-lg relative overflow-hidden">
           <div className="absolute -right-4 -top-4 w-16 h-16 bg-white/10 rounded-full blur-xl"></div>
 
           <div className="flex items-center gap-2 mb-2 relative">
@@ -138,8 +159,7 @@ export default function Sidebar() {
             Kelola paket catering dengan mudah
           </p>
 
-          {/* Tombol yang diperbaiki: ganti text-white menjadi text-oranye */}
-          <button className="w-full bg-white text-[#FF5C00] rounded-xl py-2.5 font-bold text-xs hover:bg-gray-100 transition-all flex items-center justify-center gap-2 relative z-10 shadow-sm">
+          <button className="w-full bg-white text-[#FF5C00] rounded-xl py-2.5 font-bold text-xs hover:bg-gray-100 transition-all flex items-center justify-center gap-2 relative z-10 shadow-sm cursor-pointer">
             <MdAdd className="text-lg text-[#FF5C00]" />
             Tambah Paket
           </button>
@@ -150,7 +170,7 @@ export default function Sidebar() {
             localStorage.removeItem("currentUser");
             navigate("/login");
           }}
-          className="mt-4 w-full flex items-center justify-center gap-2 p-3 text-red-400 hover:bg-red-400/10 rounded-xl transition-all font-semibold"
+          className={`mt-4 w-full flex items-center justify-center gap-2 p-3 rounded-xl transition-all font-semibold cursor-pointer ${logoutBtn}`}
         >
           <MdLogout className="text-xl" />
           Logout

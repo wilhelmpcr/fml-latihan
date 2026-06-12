@@ -16,6 +16,7 @@ const Register    = React.lazy(() => import("./pages/auth/Register"));
 const Forgot      = React.lazy(() => import("./pages/auth/Forgot"));
 const Components  = React.lazy(() => import("./pages/Components"));
 const FiturGacor   = React.lazy(() => import("./pages/FiturGacor"));
+const Users        = React.lazy(() => import("./pages/Users"));
 
 function App() {
   const errorImg = "/img/error.png";
@@ -34,6 +35,7 @@ function App() {
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/components" element={<Components />} />
           <Route path="/fitur-gacor" element={<FiturGacor />} />
+          <Route path="/users"       element={<Users />} />
 
           {/* Error Pages */}
           <Route path="/error-400" element={

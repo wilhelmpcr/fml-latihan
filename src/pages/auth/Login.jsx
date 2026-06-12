@@ -1,8 +1,8 @@
-import axios from "axios";
 import { useState } from "react";
 import { BsFillExclamationDiamondFill } from "react-icons/bs";
 import { ImSpinner2 } from "react-icons/im";
 import { useNavigate, Link } from "react-router-dom";
+import { supabase } from "../../lib/supabaseClient";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -20,51 +20,47 @@ export default function Login() {
     setLoading(true);
     setError("");
 
-    // 1. Cek kecocokan di localStorage (User yang mendaftar secara lokal)
-    const localUsers = JSON.parse(localStorage.getItem("users") || "[]");
-    const matchingUser = localUsers.find(
-      (u) =>
-        (u.email === dataForm.username || u.username === dataForm.username) &&
-        u.password === dataForm.password
-    );
-
-    if (matchingUser) {
+    if (!dataForm.username || !dataForm.password) {
+      setError("Username/email dan password wajib diisi!");
       setLoading(false);
-      localStorage.setItem("currentUser", JSON.stringify(matchingUser));
-      navigate("/");
       return;
     }
 
-    // 2. Jika tidak ada di lokal, coba API DummyJSON (untuk akun demo emilys)
-    axios
-      .post("https://dummyjson.com/user/login", {
-        username: dataForm.username,
-        password: dataForm.password,
-      })
-      .then((response) => {
-        if (response.status !== 200) {
-          setError(response.data.message);
-          return;
-        }
-        localStorage.setItem("currentUser", JSON.stringify(response.data));
-        navigate("/");
-      })
-      .catch((err) => {
-        if (err.response) {
-          setError(err.response.data.message || "An error occurred");
-        } else {
-          setError(err.message || "An unknown error occurred");
-        }
-      })
-      .finally(() => setLoading(false));
+    try {
+      // Cari user berdasarkan username ATAU email, dan password yang cocok
+      const { data: user, error: queryError } = await supabase
+        .from("users")
+        .select("*")
+        .or(`email.eq.${dataForm.username},username.eq.${dataForm.username}`)
+        .eq("password", dataForm.password)
+        .maybeSingle();
+
+      if (queryError) {
+        throw new Error(queryError.message);
+      }
+
+      if (!user) {
+        setError("Username/email atau password salah!");
+        setLoading(false);
+        return;
+      }
+
+      // Login sukses! Simpan ke localStorage
+      localStorage.setItem("currentUser", JSON.stringify(user));
+      navigate("/");
+    } catch (err) {
+      setError(err.message || "Terjadi kesalahan saat masuk");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="w-full">
       {/* Teks Instruksi seperti di gambar */}
       <p className="text-center text-[11px] text-gray-500 mb-8 leading-relaxed max-w-[280px] mx-auto">
-        Use the details provided you by your account administrator.
-        Next time you will only need the username and the password.
+        Gunakan kredensial akun yang terdaftar untuk masuk.
+        Hubungi administrator jika Anda mengalami kendala akses.
       </p>
 
       {error && (
@@ -85,14 +81,14 @@ export default function Login() {
         {/* Input Username */}
         <div className="relative group">
           <label className="absolute left-4 -top-2.5 px-1 bg-dark-card text-[11px] font-semibold text-[#FF5C00] z-10">
-            Username
+            Username / Email
           </label>
           <input
             type="text"
             name="username"
             value={dataForm.username}
             onChange={handleChange}
-            placeholder="Admin1_resto"
+            placeholder="admin_resto"
             className="w-full px-5 py-4 bg-transparent border border-white/20 rounded-2xl text-white placeholder-white/20 outline-none focus:border-[#FF5C00] transition-all"
           />
         </div>
@@ -113,13 +109,13 @@ export default function Login() {
         </div>
 
         <p className="text-[10px] text-gray-600 text-center italic">
-          Demo: emilys / emilyspass
+          Demo Admin: admin_resto / admin123
         </p>
 
         {/* Tombol Login Gradient */}
         <button
           type="submit"
-          className="w-full mt-6 bg-gradient-to-r from-[#FF8C00] to-[#FF4500] hover:brightness-110 text-white font-bold py-4 px-4 rounded-2xl transition duration-300 shadow-[0_10px_20px_rgba(255,92,0,0.2)] active:scale-95"
+          className="w-full mt-6 bg-gradient-to-r from-[#FF8C00] to-[#FF4500] hover:brightness-110 text-white font-bold py-4 px-4 rounded-2xl transition duration-300 shadow-[0_10px_20px_rgba(255,92,0,0.2)] active:scale-95 cursor-pointer"
         >
           Sign in
         </button>
@@ -134,3 +130,4 @@ export default function Login() {
     </div>
   );
 }
+

@@ -7,6 +7,7 @@ import {
   MdStorefront,
   MdExtension,
   MdFlashOn,
+  MdCardMembership,
 } from "react-icons/md";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { HiOutlineUserGroup } from "react-icons/hi";
@@ -47,6 +48,12 @@ export default function Sidebar() {
       name: "Customers",
       icon: HiOutlineUserGroup,
       path: "/customers",
+    },
+    {
+      id: "menu-members",
+      name: "Members",
+      icon: MdCardMembership,
+      path: "/admin/members",
     },
     {
       id: "menu-users",

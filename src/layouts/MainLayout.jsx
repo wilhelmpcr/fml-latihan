@@ -11,7 +11,7 @@ export default function MainLayout() {
   useEffect(() => {
     const currentUser = localStorage.getItem("currentUser");
     if (!currentUser) {
-      navigate("/login");
+      navigate("/guest");
     }
   }, [navigate]);
 

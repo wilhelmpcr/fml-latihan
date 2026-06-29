@@ -20,6 +20,9 @@ const Users        = React.lazy(() => import("./pages/Users"));
 const Members      = React.lazy(() => import("./pages/Members"));
 const MembersPortal = React.lazy(() => import("./pages/MembersPortal"));
 const Guest        = React.lazy(() => import("./pages/Guest"));
+const LandingPage  = React.lazy(() => import("./pages/LandingPage"));
+const LandingPageV1 = React.lazy(() => import("./pages/LandingPageV1"));
+const LandingPageV2 = React.lazy(() => import("./pages/LandingPageV2"));
 
 function App() {
   const errorImg = "/img/error.png";
@@ -64,8 +67,11 @@ function App() {
         </Route>
 
         {/* ===== Public Standalone Pages ===== */}
-        <Route path="/guest"    element={<Guest />} />
-        <Route path="/members"  element={<MembersPortal />} />
+        <Route path="/guest"       element={<Guest />} />
+        <Route path="/landing"     element={<LandingPage />} />
+        <Route path="/landing-v1"  element={<LandingPageV1 />} />
+        <Route path="/landing-v2"  element={<LandingPageV2 />} />
+        <Route path="/members"     element={<MembersPortal />} />
 
       </Routes>
     </Suspense>
